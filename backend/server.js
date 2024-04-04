@@ -6,7 +6,7 @@ import helmet from "helmet";
 import connectDB from "./config/db.js";
 import apiRateLimiter from "./config/api-rate-limiter.js";
 import apiSpeedLimiter from "./config/api-speed-limiter.js";
-import v1apis from './routes/v1apis.js'
+import v1apis from "./routes/v1apis.js";
 dotenv.config();
 connectDB();
 
@@ -16,15 +16,13 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-
-
-app.use(apiRateLimiter)
-app.use(apiSpeedLimiter)
+app.use(apiRateLimiter);
+app.use(apiSpeedLimiter);
 
 // app.use("/api/users", userRoutes);
-app.use('/api/v1',v1apis)
+app.use("/api/v1", v1apis);
 //route that return a response to indicate server is started
 
 app.get("/", (req, res) => {

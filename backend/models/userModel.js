@@ -15,14 +15,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    blocked: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    address:{
-      type:Object, 
-    }
   },
   { timestamps: true }
 );
@@ -40,15 +32,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.matchPasswords = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-userSchema.pre("save", function (next) {
-  if (
-    this.isModified("subscription_expire") &&
-    this.subscription_expire < new Date()
-  ) {
-    this.subscription_status = "inactive";
-  }
-  next();
-});
+
 const User = mongoose.model("User", userSchema);
 
 export default User;
