@@ -2,7 +2,7 @@ import UserRepository from "../repository/UserRepository.js";
 import logger from "../config/logger.js";
 import { isStrongPassword } from "../utils/passwordValidator.js";
 import generateToken from "../utils/generateNormalToken.js";
-
+import nodemailer from "nodemailer";
 class UserServices {
   static instance;
 
@@ -264,6 +264,43 @@ class UserServices {
         additionalInfo: "Error occurred while adding employee",
       });
       throw new Error("Failed to add employee");
+    }
+  }
+  async sendMail(emailData) {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.email",
+        port: 587,
+        secure: false, // Use `true` for port 465, `false` for all other ports
+        auth: {
+          user: process.env.USER_EMAIL,
+          pass: process.env.PASSWORD,
+        },
+      });
+      const mailOptions = {
+        from: {
+          name: emailData.user,
+          address: process.env.USER_EMAIL,
+        },
+        to: emailData.recipientEmail,
+        subject: emailData.subject,
+        text: "You are important for us",
+        html: `<b>${emailData.message}</b>`,
+      };
+
+      return transporter.sendMail(mailOptions).then((res) => {
+        return {
+          statusCode: 200,
+          data: { message: "successfully send mail" },
+        };
+      });
+    } catch (error) {
+      console.log(error);
+      return {
+        statusCode: 500,
+        data: { error: "not able to send mail" },
+      };
     }
   }
 }

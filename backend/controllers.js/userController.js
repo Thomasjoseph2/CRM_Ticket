@@ -206,6 +206,20 @@ const logout = async (req, res) => {
   }
 };
 
+const sendEmail = async (req, res) => {
+  try {
+    const result = await UserService.sendMail(req.body);
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    console.log(error, "sendEmail function");
+    logger.error("send email error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "error in email controller",
+    });
+  }
+};
+
 // Exporting the controllers
 export {
   authUser,
@@ -218,4 +232,5 @@ export {
   getCustomers,
   addEmployees,
   getEmployees,
+  sendEmail,
 };

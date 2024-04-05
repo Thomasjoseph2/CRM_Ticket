@@ -12,7 +12,8 @@ import {
   addCustomer,
   getCustomers,
   addEmployees,
-  getEmployees
+  getEmployees,
+  sendEmail
 } from "../../controllers.js/userController.js";
 import {
   authUserValidation,
@@ -34,6 +35,9 @@ router.post("/add-product", addProductValidation, protect,validate, addProduct);
 router.post("/add-customer", addCustomerValidation, protect, validate,addCustomer);
 
 router.post("/add-employees", addEmployeeValidation, protect,validate, addEmployees);
+
+router.post("/send-mail", protect, sendEmail);
+
 
 router.get("/get-products", protect, getProduct);
 
