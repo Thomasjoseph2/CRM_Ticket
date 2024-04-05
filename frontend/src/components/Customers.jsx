@@ -80,7 +80,7 @@ const Customers = () => {
     {
       name: "Products",
       selector: (row) =>
-        row.products.map((product) => product.title).join(", "),
+        row?.products?.map((product) => product.title).join(", "),
     },
     {
       name: "Actions",
