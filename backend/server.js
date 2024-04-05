@@ -4,8 +4,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import connectDB from "./config/db.js";
-import apiRateLimiter from "./config/api-rate-limiter.js";
-import apiSpeedLimiter from "./config/api-speed-limiter.js";
+// import apiRateLimiter from "./config/api-rate-limiter.js";
+// import apiSpeedLimiter from "./config/api-speed-limiter.js";
 import v1apis from "./routes/v1apis.js";
 import path from "path";
 
