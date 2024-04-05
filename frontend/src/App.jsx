@@ -10,7 +10,8 @@ import PrivateRoute from "./private-routes/PrivateRoute";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 
-axios.defaults.baseURL = "http://localhost:5000/api/v1/users";
+// axios.defaults.baseURL = "http://localhost:5000/api/v1/users";
+axios.defaults.baseURL = "https://crm-ticket-fzfl.onrender.com/api/v1/users";
 axios.defaults.withCredentials = true;
 
 function App() {

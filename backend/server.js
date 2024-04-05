@@ -17,7 +17,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "https://crm-ticket-fzfl.onrender.com" }));
 
 app.use(apiRateLimiter);
 app.use(apiSpeedLimiter);
