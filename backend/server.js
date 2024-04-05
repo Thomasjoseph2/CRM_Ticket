@@ -13,7 +13,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.set("trust proxy", true); // Set trust proxy here
+// app.set("trust proxy", true); // Set trust proxy here
 
 app.use(helmet());
 app.use(express.json());
@@ -21,8 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({ origin: "https://crm-ticket-fzfl.onrender.com" }));
 
-app.use(apiRateLimiter);
-app.use(apiSpeedLimiter);
+// app.use(apiRateLimiter);
+// app.use(apiSpeedLimiter);
 
 app.use("/api/v1", v1apis);
 
