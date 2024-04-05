@@ -17,6 +17,20 @@ export const addProductValidation = [
   body("price").notEmpty(),
 ];
 
+export const addCustomerValidation = [
+  body("name").notEmpty(),
+  body("email").notEmpty(),
+  body("phone").notEmpty(),
+  body("address").notEmpty(),
+  body("products").notEmpty(),
+];
+
+export const addEmployeeValidation = [
+  body("name").notEmpty(),
+  body("email").notEmpty(),
+  body("phone").notEmpty(),
+  body("address").notEmpty(),
+];
 
 export const validate = (req, res, next) => {
   const errors = validationResult(req);

@@ -6,14 +6,18 @@ import toast from "react-hot-toast";
 const Customers = () => {
   const [showModal, setShowModal] = useState(false);
   const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/get-products");
-      setProducts(response.data.products);
+      const productResponse = await axios.get("/get-products");
+      setProducts(productResponse.data.products);
+
+      const customerResponse = await axios.get("/get-customers");
+      setCustomers(customerResponse.data.customers);
     } catch (error) {
-      toast.error("something went wrong...");
-      console.error("Error fetching product:", error);
+      toast.error("Something went wrong...");
+      console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {
@@ -38,25 +42,27 @@ const Customers = () => {
     },
     {
       name: "products",
-      selector: (row) => row.products,
-    },
-  ];
-  const dummydata = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      phone: "1234567890",
-      address: "123 Main St, City",
-      products: ["Product 1", "Product 2"],
+      selector: (row) =>
+        row.products.map((product) => product.title).join(", "),
     },
     {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      phone: "9876543210",
-      address: "456 Elm St, Town",
-      products: ["Product 3", "Product 4"],
+      name: "Actions",
+      cell: (row) => (
+        <div className="space-x-2">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => handleSendEmail(row.email)}
+          >
+            Edit User
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => handleSendEmail(row.email)}
+          >
+            Send Email
+          </button>
+        </div>
+      ),
     },
   ];
 
@@ -98,7 +104,7 @@ const Customers = () => {
           <DataTable
             customStyles={customStyles}
             columns={columns}
-            data={dummydata}
+            data={customers}
           />
         </div>
       </div>

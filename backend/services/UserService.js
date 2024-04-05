@@ -142,26 +142,48 @@ class UserServices {
     }
   }
 
-  // Service method to add address for a user
-  async addAddress(userId, address) {
+  async getEmployee() {
     try {
-      // Adding the address to the user using UserRepository
-      await UserRepository.addAddress(userId, address);
-
-      // Returning success response for address added successfully
-      return {
-        statusCode: 200,
-        data: { message: "Address added successfully" },
-      };
+      const employee = await UserRepository.getEmployee();
+      // Checking if the employee exists
+      if (employee) {
+        return { statusCode: 200, employee };
+      } else {
+        // Throwing an error for user not found
+        throw new Error("employee not found");
+      }
     } catch (error) {
-      // Logging and throwing an error for failed address addition
-      console.log(error, "add address service");
-      logger.error("Error in addAddress:", {
+      // Logging and throwing an error for failed user retrieval
+      console.log(error, "get employee service");
+      logger.error("Error in getemployee:", {
         message: error.message,
         stack: error.stack,
-        additionalInfo: "Failed to add user's address",
+        additionalInfo: "Error in getemployee:",
       });
-      throw new Error("Failed to add user's address");
+      throw error;
+    }
+  }
+  async getCustomers() {
+    try {
+      const customers = await UserRepository.getCustomers();
+      // Checking if the user exists
+      if (customers) {
+        // Converting the user to an object and returning success response
+        // const user = finduser.toObject();
+        return { statusCode: 200, customers };
+      } else {
+        // Throwing an error for user not found
+        throw new Error("customers not found");
+      }
+    } catch (error) {
+      // Logging and throwing an error for failed user retrieval
+      console.log(error, "get customers service");
+      logger.error("Error in getcustomers:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error in getcustomers:",
+      });
+      throw error;
     }
   }
   async addProduct(title, description, price) {
@@ -192,6 +214,56 @@ class UserServices {
       });
 
       throw new Error("Failed to add product");
+    }
+  }
+
+  async addCustomer(customer) {
+    try {
+      const existingCustomer = await UserRepository.findCustomerPhone(
+        customer.phone
+      );
+      if (existingCustomer) {
+        return {
+          statusCode: 409,
+          data: { error: "Customer already exists" },
+        };
+      }
+
+      const result = await UserRepository.createCustomer(customer);
+      return result;
+    } catch (error) {
+      console.error(error, "add customer service");
+      logger.error("Error in addCustomer service", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while adding customer",
+      });
+      throw new Error("Failed to add customer");
+    }
+  }
+
+  async addEmployee(employee) {
+    try {
+      const existingEmployee = await UserRepository.findEmployeeByPhone(
+        employee.phone
+      );
+      if (existingEmployee) {
+        return {
+          statusCode: 409,
+          data: { error: "employee already exists" },
+        };
+      }
+
+      const result = await UserRepository.createEmployee(employee);
+      return result;
+    } catch (error) {
+      console.error(error, "add employee service");
+      logger.error("Error in addemployee service", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while adding employee",
+      });
+      throw new Error("Failed to add employee");
     }
   }
 }

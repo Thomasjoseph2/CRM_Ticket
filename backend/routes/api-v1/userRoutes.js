@@ -6,15 +6,19 @@ import {
   registerUser,
   authUser,
   getProfile,
-  addAddress,
   logout,
   addProduct,
-  getProduct
+  getProduct,
+  addCustomer,
+  getCustomers,
+  addEmployees,
+  getEmployees
 } from "../../controllers.js/userController.js";
 import {
-  addAddressValidation,
   authUserValidation,
   addProductValidation,
+  addCustomerValidation,
+  addEmployeeValidation,
   validate,
 } from "../../middlewares/validationMiddleware.js";
 const router = express.Router();
@@ -25,17 +29,18 @@ router.post("/auth", authUserValidation, loginBlockCheck, validate, authUser);
 
 router.get("/get-profile", protect, getProfile);
 
-router.post("/add-product", addProductValidation, protect, addProduct);
+router.post("/add-product", addProductValidation, protect,validate, addProduct);
 
-router.get ('/get-products',protect,getProduct)
+router.post("/add-customer", addCustomerValidation, protect, validate,addCustomer);
 
-router.post(
-  "/add-address",
-  addAddressValidation,
-  protect,
-  validate,
-  addAddress
-);
+router.post("/add-employees", addEmployeeValidation, protect,validate, addEmployees);
+
+router.get("/get-products", protect, getProduct);
+
+router.get("/get-customers", protect, getCustomers);
+
+router.get("/get-employees", protect, getEmployees);
+
 
 router.post("/logout", logout);
 

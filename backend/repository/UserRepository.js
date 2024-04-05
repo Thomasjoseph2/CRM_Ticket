@@ -1,6 +1,8 @@
 import User from "../models/userModel.js";
 import logger from "../config/logger.js";
 import Product from "../models/productModel.js";
+import Customer from "../models/customerModel.js";
+import Employee from "../models/employeesModel.js";
 class UserRepository {
   static instance;
 
@@ -14,6 +16,7 @@ class UserRepository {
   async createUser(userData) {
     return await User.create(userData);
   }
+
   async findByEmail(email) {
     try {
       return await User.findOne(email);
@@ -24,6 +27,31 @@ class UserRepository {
         additionalInfo: "Failed to find user by email",
       });
       throw new Error("Failed to find user by email");
+    }
+  }
+
+  async findCustomerPhone(phone) {
+    try {
+      return await Customer.findOne({ phone: phone });
+    } catch (error) {
+      logger.error("Error in find by phone:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Failed to find  by phone",
+      });
+      throw new Error("Failed to find user by phone");
+    }
+  }
+  async findEmployeeByPhone(phone) {
+    try {
+      return await Employee.findOne({ phone: phone });
+    } catch (error) {
+      logger.error("Error in find by phone:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Failed to find  by phone",
+      });
+      throw new Error("Failed to find user by phone");
     }
   }
   async findProductByName(title) {
@@ -55,6 +83,41 @@ class UserRepository {
     }
   }
 
+  async getEmployee() {
+    try {
+      // Find all products and sort them based on the 'createdAt' field in descending order
+      const employee = await Employee.find({}).sort({ createdAt: -1 });
+
+      return employee;
+    } catch (error) {
+      logger.error("Error in getemployee:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Failed to fetch employee",
+      });
+      throw new Error("Failed to fetch employee");
+    }
+  }
+  async getCustomers() {
+    try {
+      // Find all products and sort them based on the 'createdAt' field in descending order
+      // const customers = await Customer.find({}).sort({ createdAt: -1 });
+
+      const customers = await Customer.find({}).populate({
+        path: "products",
+        select: "title _id",
+      });
+
+      return customers;
+    } catch (error) {
+      logger.error("Error in getcustomers:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Failed to fetch customers",
+      });
+      throw new Error("Failed to fetch customers");
+    }
+  }
   async findUserByIdForMiddleWare(userId) {
     try {
       return await User.findById(userId).select("-password");
@@ -97,25 +160,6 @@ class UserRepository {
     return await User.findById(userId);
   }
 
-  async addAddress(userId, address) {
-    try {
-      const user = await User.findById(userId);
-
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      user.address = address;
-      await user.save();
-    } catch (error) {
-      logger.error("Error in addAddress:", {
-        message: error.message,
-        stack: error.stack,
-        additionalInfo: "Error in addAddress:",
-      });
-      throw new Error("Failed to add user's address");
-    }
-  }
   async createProduct(productData) {
     try {
       // Create a new product using the Product model
@@ -135,6 +179,49 @@ class UserRepository {
       });
 
       throw new Error("Failed to create product");
+    }
+  }
+
+  async createCustomer(customerData) {
+    try {
+      // Create a new product using the Product model
+      const customer = await Customer.create(customerData);
+
+      return {
+        statusCode: 201,
+        data: customer, // Return the created customer
+      };
+    } catch (error) {
+      console.error(error, "create customer repository");
+      // Handling errors and logging them
+      logger.error("Error in createcustomer repository", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while creating customer",
+      });
+
+      throw new Error("Failed to create customer");
+    }
+  }
+  async createEmployee(employeeData) {
+    try {
+      // Create a new product using the Product model
+      const employee = await Employee.create(employeeData);
+
+      return {
+        statusCode: 201,
+        data: employee,
+      };
+    } catch (error) {
+      console.error(error, "create employee repository");
+      // Handling errors and logging them
+      logger.error("Error in createemployee repository", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while creating employee",
+      });
+
+      throw new Error("Failed to create employee");
     }
   }
 }

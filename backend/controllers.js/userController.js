@@ -20,6 +20,42 @@ const registerUser = async (req, res) => {
   }
 };
 
+// add customer controller
+// Route: POST /api/users/add-customer
+// Access: Public
+
+// Backend - Controller
+const addCustomer = async (req, res) => {
+  try {
+    const result = await UserService.addCustomer(req.body);
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    console.log(error, "addCustomer function");
+    logger.error("addCustomer error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "error in addcustomer controller",
+    });
+    res.status(500).json({ error: "Failed to add customer" });
+  }
+};
+
+// Backend - Controller
+const addEmployees = async (req, res) => {
+  try {
+    const result = await UserService.addEmployee(req.body);
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    console.log(error, "addemployees function");
+    logger.error("addemployees error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "error in addemployees controller",
+    });
+    res.status(500).json({ error: "Failed to add employees" });
+  }
+};
+
 // Auth user controller and token setter
 // Route: POST /api/users/auth
 // Access: Public
@@ -70,12 +106,12 @@ const getProfile = async (req, res) => {
   }
 };
 
-const getProduct=async (req,res)=>{
+const getProduct = async (req, res) => {
   try {
     // Extracting userId from the request body
     const products = await UserService.getProducts();
     // Sending the response based on the result
-    res.status(products.statusCode).json({ products: products.products});
+    res.status(products.statusCode).json({ products: products.products });
   } catch (error) {
     // Handling errors and logging them
     console.log(error, "get products controller");
@@ -87,35 +123,40 @@ const getProduct=async (req,res)=>{
 
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
-// Add address controller
-// Route: POST /api/users/add-address
-// Access: Private (requires authentication)
-const addAddress = async (req, res) => {
+const getEmployees = async (req, res) => {
   try {
-    // Extracting userId, place, district, and country from the request body
-    const { place, district, country } = req.body;
-
-    // Creating an address object
-    const address = {
-      place,
-      district,
-      country,
-    };
-
-    // Calling the addAddress function from the UserService
-    const result = await UserService.addAddress(req.user.userId, address);
-
+    // Extracting userId from the request body
+    const employee = await UserService.getEmployee();
     // Sending the response based on the result
-    res.status(result.statusCode).json(result.data);
+    res.status(employee.statusCode).json({ employee: employee.employee });
   } catch (error) {
-    console.log(error, "add address constroller");
     // Handling errors and logging them
-    logger.error("Error in addAddress", {
+    console.log(error, "get employee controller");
+    logger.error("Get user employee error", {
       message: error.message,
       stack: error.stack,
-      additionalInfo: "error occured while adding address",
+      additionalInfo: "get employee controller",
+    });
+
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const getCustomers = async (req, res) => {
+  try {
+    // Extracting userId from the request body
+    const customers = await UserService.getCustomers();
+    // Sending the response based on the result
+    res.status(customers.statusCode).json({ customers: customers.customers });
+  } catch (error) {
+    // Handling errors and logging them
+    console.log(error, "get customers controller");
+    logger.error("Get user customers error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "get customers controller",
     });
 
     res.status(500).json({ error: "Internal Server Error" });
@@ -126,9 +167,13 @@ const addProduct = async (req, res) => {
   try {
     // Extracting name, description, and price from the request body
     const { title, description, price } = req.body;
-    const lowerCaseTitle=title.toLowerCase()
+    const lowerCaseTitle = title.toLowerCase();
     // Calling the addProduct method from the UserService
-    const result = await UserService.addProduct(lowerCaseTitle, description, price);
+    const result = await UserService.addProduct(
+      lowerCaseTitle,
+      description,
+      price
+    );
 
     // Sending the response based on the result
     res.status(result.statusCode).json(result.data);
@@ -162,4 +207,15 @@ const logout = async (req, res) => {
 };
 
 // Exporting the controllers
-export { authUser, getProfile, addAddress, logout, registerUser, addProduct,getProduct };
+export {
+  authUser,
+  getProfile,
+  logout,
+  registerUser,
+  addProduct,
+  getProduct,
+  addCustomer,
+  getCustomers,
+  addEmployees,
+  getEmployees,
+};

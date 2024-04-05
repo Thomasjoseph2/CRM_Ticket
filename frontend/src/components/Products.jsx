@@ -58,7 +58,7 @@ const Products = () => {
     },
     {
       name: "Price",
-      selector: (row) => row.price,
+      selector: (row) => '₹'+row.price,
     },
   ];
 

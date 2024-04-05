@@ -35,20 +35,17 @@ const Navbar = () => {
       <h1 className="w-full text-3xl font-bold text-[#00df9a]">CRM</h1>
       {userInfo ? (
         <ul className=" hidden md:flex">
-          <Link to="/products">
-            <li className="p-4">Products</li>
-          </Link>
-          <Link to="/contact">
-            <li className="p-4">Contact</li>
-          </Link>
           <Link to="/customers">
             <li className="p-4">Coustomers</li>
           </Link>
           <Link to="/employees">
             <li className="p-4">Employees</li>
           </Link>
-          <Link to="/complaints">
-            <li className="p-4">Complaints</li>
+          <Link to="/products">
+            <li className="p-4">Products</li>
+          </Link>
+          <Link to="/contact">
+            <li className="p-4">Contact</li>
           </Link>
           <Link onClick={handleLogout}>
             <li className="p-4">Logout</li>
@@ -92,20 +89,20 @@ const Navbar = () => {
       >
         <h1 className=" p-4 w-full text-3xl font-bold text-[#00df9a]">React</h1>
         <ul className="uppercase ">
-        <Link to="/products">
-            <li className="p-4">Products</li>
-          </Link>
-          <Link to="/contact">
-            <li className="p-4">Contact</li>
-          </Link>
-          <Link to="/customers">
+        <Link to="/customers">
             <li className="p-4">Coustomers</li>
           </Link>
           <Link to="/employees">
             <li className="p-4">Employees</li>
           </Link>
-          <Link to="/complaints">
-            <li className="p-4">Complaints</li>
+          <Link to="/products">
+            <li className="p-4">Products</li>
+          </Link>
+          <Link to="/contact">
+            <li className="p-4">Contact</li>
+          </Link>
+          <Link onClick={handleLogout}>
+            <li className="p-4">Logout</li>
           </Link>
         </ul>
       </div>

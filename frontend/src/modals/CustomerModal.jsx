@@ -1,8 +1,9 @@
 import React from "react";
 import Modal from "react-modal";
 import Select from "react-select";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 const AddCustomerModal = ({ showModal, setShowModal, products }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -38,9 +39,31 @@ const AddCustomerModal = ({ showModal, setShowModal, products }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    try {
+      const response = await axios.post("/add-customer", formData);
+      console.log("Customer added:", response.data);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        products: [],
+      });
+      setShowModal(false);
+      toast.success("Customer added successfully");
+    } catch (error) {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        products: [],
+      });
+      toast.error(error.response.data.error);
+      console.error("Error adding product:", error);
+    }
     setShowModal(false);
   };
   const productOptions = products.map((product) => ({
