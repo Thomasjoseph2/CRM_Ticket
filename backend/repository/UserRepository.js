@@ -224,6 +224,20 @@ class UserRepository {
       throw new Error("Failed to create employee");
     }
   }
+  async updateCustomer(id, customerData) {
+    try {
+      const updateCustomer = await Customer.findByIdAndUpdate(id, customerData, { new: true });
+      return updateCustomer;
+    } catch (error) {
+      console.error(error, "update customer repository");
+      logger.error("Error in updateCustomer repository", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while updating customer",
+      });
+      throw new Error("Failed to update customer");
+    }
+  }
 }
 
 export default new UserRepository();

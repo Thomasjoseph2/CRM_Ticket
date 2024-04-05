@@ -5,6 +5,8 @@ import axios from "axios";
 const Products = () => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
+  const [refresher, setRefresher] = useState(Date.now());
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -13,12 +15,12 @@ const Products = () => {
 
   useEffect(() => {
     fetchData();
-  }, [data]);
+  }, [refresher]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get("/get-products");
-      setData(response.data)
+      setData(response.data);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -58,7 +60,7 @@ const Products = () => {
     },
     {
       name: "Price",
-      selector: (row) => '₹'+row.price,
+      selector: (row) => "₹" + row.price,
     },
   ];
 
@@ -72,6 +74,26 @@ const Products = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const trimmedFormData = {
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      price: formData.price.trim(),
+    };
+
+    if (
+      !trimmedFormData.title ||
+      !trimmedFormData.description ||
+      !trimmedFormData.price
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (isNaN(trimmedFormData.price)) {
+      toast.error("Price must be a number");
+      return;
+    }
+
     try {
       const response = await axios.post("/add-product", formData);
       console.log("Product added:", response.data);
@@ -81,6 +103,7 @@ const Products = () => {
         price: "",
       });
       setShowModal(false);
+      setRefresher(Date.now());
       toast.success("product added successfully");
     } catch (error) {
       setFormData({
@@ -154,7 +177,11 @@ const Products = () => {
         </div>
       )}
       <div className="m-10">
-        <DataTable customStyles={customStyles} columns={columns} data={data?.products} />
+        <DataTable
+          customStyles={customStyles}
+          columns={columns}
+          data={data?.products}
+        />
       </div>
     </div>
   );

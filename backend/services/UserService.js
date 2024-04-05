@@ -91,33 +91,6 @@ class UserServices {
     }
   }
 
-  // Service method to get user details by user ID
-  async getUser(userId) {
-    try {
-      // Finding the user by ID in the UserRepository
-      const finduser = await UserRepository.getUser(userId);
-
-      // Checking if the user exists
-      if (finduser) {
-        // Converting the user to an object and returning success response
-        const user = finduser.toObject();
-        return { statusCode: 200, user };
-      } else {
-        // Throwing an error for user not found
-        throw new Error("User not found");
-      }
-    } catch (error) {
-      // Logging and throwing an error for failed user retrieval
-      console.log(error, "get user service");
-      logger.error("Error in getUser:", {
-        message: error.message,
-        stack: error.stack,
-        additionalInfo: "Error in getUser:",
-      });
-      throw error;
-    }
-  }
-
   async getProducts() {
     try {
       const products = await UserRepository.getProducts();
@@ -301,6 +274,30 @@ class UserServices {
         statusCode: 500,
         data: { error: "not able to send mail" },
       };
+    }
+  }
+  async updateCustomer(id, customerData) {
+    try {
+      const updateCustomer = await UserRepository.updateCustomer(
+        id,
+        customerData
+      );
+      if (updateCustomer) {
+        return {
+          statusCode: 200,
+          data: { message: "customer updated successfully" },
+        };
+      } else {
+        throw new Error("customer not found");
+      }
+    } catch (error) {
+      console.error(error, "update customer service");
+      logger.error("Error in updateCustomer service", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while updating customer",
+      });
+      throw new Error("Failed to update customer");
     }
   }
 }

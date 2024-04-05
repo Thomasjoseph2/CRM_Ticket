@@ -84,28 +84,6 @@ const authUser = async (req, res) => {
   }
 };
 
-// Get user profile controller
-// Route: GET /api/users/get-profile
-// Access: Private (requires authentication)
-const getProfile = async (req, res) => {
-  try {
-    // Extracting userId from the request body
-    const user = await UserService.getUser(req.user.userId);
-    // Sending the response based on the result
-    res.status(user.statusCode).json({ user: user.user });
-  } catch (error) {
-    // Handling errors and logging them
-    console.log(error, "get profile controller");
-    logger.error("Get user profile error", {
-      message: error.message,
-      stack: error.stack,
-      additionalInfo: "get profile controller",
-    });
-
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 const getProduct = async (req, res) => {
   try {
     // Extracting userId from the request body
@@ -220,10 +198,30 @@ const sendEmail = async (req, res) => {
   }
 };
 
+const updateCustomer = async (req, res) => {
+  try {
+    const { id, name, email, phone, address } = req.body;
+    const result = await UserService.updateCustomer(id, {
+      name,
+      email,
+      phone,
+      address,
+    });
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    console.log(error, "update customer controller");
+    logger.error("Update customer error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "Error in update customer controller",
+    });
+    res.status(500).json({ error: "Failed to update customer" });
+  }
+};
+
 // Exporting the controllers
 export {
   authUser,
-  getProfile,
   logout,
   registerUser,
   addProduct,
@@ -233,4 +231,5 @@ export {
   addEmployees,
   getEmployees,
   sendEmail,
+  updateCustomer,
 };

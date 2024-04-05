@@ -31,7 +31,7 @@ const Hero = () => {
             </h1>
           ) : (
             <Link to="/login">
-              <button className="text-xl font-bold mt-3 bg-blue-800 w-full p-1 rounded-md">
+              <button className="text-xl font-bold mt-3 bg-[#00df9a] w-full p-1 rounded-md">
                 Login
               </button>
             </Link>

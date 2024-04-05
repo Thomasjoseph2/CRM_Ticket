@@ -5,7 +5,6 @@ import { protect, loginBlockCheck } from "../../middlewares/authMiddleware.js";
 import {
   registerUser,
   authUser,
-  getProfile,
   logout,
   addProduct,
   getProduct,
@@ -13,7 +12,8 @@ import {
   getCustomers,
   addEmployees,
   getEmployees,
-  sendEmail
+  sendEmail,
+  updateCustomer
 } from "../../controllers.js/userController.js";
 import {
   authUserValidation,
@@ -28,23 +28,23 @@ router.post("/register", registerUser);
 
 router.post("/auth", authUserValidation, loginBlockCheck, validate, authUser);
 
-router.get("/get-profile", protect, getProfile);
-
 router.post("/add-product", addProductValidation, protect,validate, addProduct);
 
 router.post("/add-customer", addCustomerValidation, protect, validate,addCustomer);
 
 router.post("/add-employees", addEmployeeValidation, protect,validate, addEmployees);
 
-router.post("/send-mail", protect, sendEmail);
+router.post("/add-employees", addEmployeeValidation, protect,validate, addEmployees);
 
+router.post("/update-customer", protect, updateCustomer);
+
+router.post("/send-mail", protect, sendEmail);
 
 router.get("/get-products", protect, getProduct);
 
 router.get("/get-customers", protect, getCustomers);
 
 router.get("/get-employees", protect, getEmployees);
-
 
 router.post("/logout", logout);
 

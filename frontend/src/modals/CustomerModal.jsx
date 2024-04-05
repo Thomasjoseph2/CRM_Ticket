@@ -4,7 +4,12 @@ import Select from "react-select";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-const AddCustomerModal = ({ showModal, setShowModal, products }) => {
+const AddCustomerModal = ({
+  showModal,
+  setShowModal,
+  products,
+  setRefresher,
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -43,7 +48,6 @@ const AddCustomerModal = ({ showModal, setShowModal, products }) => {
     e.preventDefault();
     try {
       const response = await axios.post("/add-customer", formData);
-      console.log("Customer added:", response.data);
       setFormData({
         name: "",
         email: "",
@@ -52,6 +56,7 @@ const AddCustomerModal = ({ showModal, setShowModal, products }) => {
         products: [],
       });
       setShowModal(false);
+      setRefresher(Date.now());
       toast.success("Customer added successfully");
     } catch (error) {
       setFormData({
@@ -132,6 +137,10 @@ const AddCustomerModal = ({ showModal, setShowModal, products }) => {
               isMulti
               options={productOptions}
               onChange={handleProductChange}
+              isSearchable={true} // Enable search functionality
+              menuPortalTarget={document.body} // Render the dropdown menu outside of the component's DOM hierarchy
+              menuPosition={"fixed"} // Position the dropdown menu relative to the viewport
+              menuShouldScrollIntoView={true}
             />
           </div>{" "}
           <button

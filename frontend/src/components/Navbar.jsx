@@ -32,7 +32,9 @@ const Navbar = () => {
   };
   return (
     <div className="text-white flex items-center justify-center  mx-auto max-w-[1240px] p-4 top-0 z-10 sticky">
-      <h1 className="w-full text-3xl font-bold text-[#00df9a]">CRM</h1>
+      <h1 className="w-full text-3xl font-bold text-[#00df9a]">
+        <Link to="/">CRM</Link>
+      </h1>
       {userInfo ? (
         <ul className=" hidden md:flex">
           <Link to="/customers">
@@ -43,9 +45,6 @@ const Navbar = () => {
           </Link>
           <Link to="/products">
             <li className="p-4">Products</li>
-          </Link>
-          <Link to="/contact">
-            <li className="p-4">Contact</li>
           </Link>
           <Link onClick={handleLogout}>
             <li className="p-4">Logout</li>
@@ -89,7 +88,7 @@ const Navbar = () => {
       >
         <h1 className=" p-4 w-full text-3xl font-bold text-[#00df9a]">React</h1>
         <ul className="uppercase ">
-        <Link to="/customers">
+          <Link to="/customers">
             <li className="p-4">Coustomers</li>
           </Link>
           <Link to="/employees">
@@ -97,9 +96,6 @@ const Navbar = () => {
           </Link>
           <Link to="/products">
             <li className="p-4">Products</li>
-          </Link>
-          <Link to="/contact">
-            <li className="p-4">Contact</li>
           </Link>
           <Link onClick={handleLogout}>
             <li className="p-4">Logout</li>
