@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/userContext";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const { getUserInfo, setLocalStorageUser } = useUserContext();
+  const userInfo = getUserInfo();
+   useEffect(() => {
+    if(userInfo){
+      navigate('/')
+    }
+  }, [userInfo]);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -42,6 +51,7 @@ const Login = () => {
             //the response is coming like this format i am accesssing the data in the below format
             if (res.data) {
               toast.success("login successfull");
+              setLocalStorageUser(res.data._id, res.data.name, res.data.email);
               navigate("/");
             }
           })

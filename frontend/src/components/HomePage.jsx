@@ -1,6 +1,10 @@
 import React from "react";
 import { ReactTyped } from "react-typed";
+import { useUserContext } from "../context/userContext";
+
 const Hero = () => {
+  const { getUserInfo ,setLocalStorageUser} = useUserContext();
+ const userInfo=getUserInfo()
   return (
     <div className="text-white ">
       <div className=" mt-[96px] text-center  flex flex-col justify-center items-center mx-auto overflow-y-hidden p-24">

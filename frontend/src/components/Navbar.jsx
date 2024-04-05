@@ -1,17 +1,28 @@
 import { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { useUserContext } from "../context/userContext";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const [toggle, setToggle] = useState(true);
   return (
     <div className="text-white flex items-center justify-center  mx-auto max-w-[1240px] p-4 top-0 z-10 sticky">
       <h1 className="w-full text-3xl font-bold text-[#00df9a]">CRM</h1>
       <ul className=" hidden md:flex">
-        <li className="p-4">Targets</li>
-        <li className="p-4">Contact</li>
-        <li className="p-4">Coustomers</li>
-        <li className="p-4">Employees</li>
-        <li className="p-4">Complaints</li>
+        <Link to='/targets'>
+          <li className="p-4">Targets</li>
+        </Link>
+        <Link to='/contact'>
+          <li className="p-4">Contact</li>
+        </Link>
+        <Link to='/customers'>
+          <li className="p-4">Coustomers</li>
+        </Link>
+        <Link to='/employees'>
+          <li className="p-4">Employees</li>
+        </Link>
+        <Link to='/complaints'>
+          <li className="p-4">Complaints</li>
+        </Link>
       </ul>
 
       <div className="md:hidden">
@@ -41,9 +52,21 @@ const Navbar = () => {
       >
         <h1 className=" p-4 w-full text-3xl font-bold text-[#00df9a]">React</h1>
         <ul className="uppercase ">
-        <li className="p-4">Coustomers</li>
-        <li className="p-4">Employees</li>
-        <li className="p-4">Contact</li>
+        <Link to='/targets'>
+          <li className="p-4">Targets</li>
+        </Link>
+        <Link to='/contact'>
+          <li className="p-4">Contact</li>
+        </Link>
+        <Link to='/customers'>
+          <li className="p-4">Coustomers</li>
+        </Link>
+        <Link to='/employees'>
+          <li className="p-4">Employees</li>
+        </Link>
+        <Link to='/complaints'>
+          <li className="p-4">Complaints</li>
+        </Link>
         </ul>
       </div>
     </div>

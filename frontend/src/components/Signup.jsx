@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/userContext";
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,6 +11,14 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const { getUserInfo, setLocalStorageUser } = useUserContext();
+  const userInfo = getUserInfo();
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  }, [userInfo]);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -72,6 +81,8 @@ const Signup = () => {
           .then((res) => {
             //the response is coming like this format i am accesssing the data in the below format
             if (res.data.data) {
+              const { _id, name, email } = res.data.data;
+              setLocalStorageUser(_id, name, email);
               toast.success("user created successfully");
               navigate("/");
             }

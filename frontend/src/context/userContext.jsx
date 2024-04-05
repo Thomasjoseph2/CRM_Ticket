@@ -1,21 +1,32 @@
+import { createContext, useContext, useState } from "react";
 
-import { createContext,useContext,useState } from "react";
+const UserContext = createContext();
 
+export const useUserContext = () => {
+  return useContext(UserContext);
+};
 
-const UserContext=createContext();
+export const UserProvider = ({ children }) => {
+  const setLocalStorageUser = (_id, name, email) => {
+    localStorage.setItem("userInfo", JSON.stringify({ _id, name, email }));
+  };
 
-export const  useUserContext=()=>{
-    return useContext(UserContext)
-}
+  const getUserInfo = () => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) return JSON.parse(userInfo);
+    else return null;
+  };
 
-export const UserProvider=({children})=>{
-     
+  const logout = () => {
+    localStorage.removeItem("userInfo");
+    Navigate("/");
+  };
 
-     return (
-        <UserContext.Provider value={{user,loginUser}}>
-            {children}
-        </UserContext.Provider>
-     )
-}
+  return (
+    <UserContext.Provider value={{ getUserInfo, setLocalStorageUser, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
 
-UserContext.displayName="UserContext"
+UserContext.displayName = "UserContext";
