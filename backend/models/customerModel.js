@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
+
 const customerSchema = mongoose.Schema(
   {
     name: {
@@ -14,9 +16,10 @@ const customerSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    products: {
-      type: Array,
-    },
+    products: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
+    }],
     address: {
       type: Object,
     },

@@ -70,6 +70,25 @@ const getProfile = async (req, res) => {
   }
 };
 
+const getProduct=async (req,res)=>{
+  try {
+    // Extracting userId from the request body
+    const products = await UserService.getProducts();
+    // Sending the response based on the result
+    res.status(products.statusCode).json({ products: products.products});
+  } catch (error) {
+    // Handling errors and logging them
+    console.log(error, "get products controller");
+    logger.error("Get user products error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "get products controller",
+    });
+
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 // Add address controller
 // Route: POST /api/users/add-address
 // Access: Private (requires authentication)
@@ -103,6 +122,29 @@ const addAddress = async (req, res) => {
   }
 };
 
+const addProduct = async (req, res) => {
+  try {
+    // Extracting name, description, and price from the request body
+    const { title, description, price } = req.body;
+    const lowerCaseTitle=title.toLowerCase()
+    // Calling the addProduct method from the UserService
+    const result = await UserService.addProduct(lowerCaseTitle, description, price);
+
+    // Sending the response based on the result
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    console.error(error, "add product controller");
+    // Handling errors and logging them
+    logger.error("Error in addProduct controller", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "Error occurred while adding product",
+    });
+
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 //logout expiring the jwt
 const logout = async (req, res) => {
   try {
@@ -120,4 +162,4 @@ const logout = async (req, res) => {
 };
 
 // Exporting the controllers
-export { authUser, getProfile, addAddress, logout, registerUser };
+export { authUser, getProfile, addAddress, logout, registerUser, addProduct,getProduct };

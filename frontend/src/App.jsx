@@ -6,9 +6,10 @@ import Navbar from "./components/Navbar";
 import Contact from "./components/Contact";
 import Customers from "./components/Customers";
 import Complaints from "./components/Complaints";
-import Targets from "./components/Targets";
+import Products from "./components/Products";
 import Employees from "./components/Employees";
-
+import AppLayout from "./AppLayout";
+import PrivateRoute from "./private-routes/PrivateRoute";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 
@@ -18,17 +19,20 @@ axios.defaults.withCredentials = true;
 function App() {
   return (
     <div>
-      <Navbar />
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       <Routes>
-        <Route index path="/" element={<HomePage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/targets" element={<Targets />} />
-        <Route path="/complaints" element={<Complaints />} />
-        <Route path="/customers" element={<Customers />} />
-        <Route path="/employees" element={<Employees />} />
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="" element={<PrivateRoute />}>
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/complaints" element={<Complaints />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/employees" element={<Employees />} />
+          </Route>
+        </Route>
       </Routes>
     </div>
   );

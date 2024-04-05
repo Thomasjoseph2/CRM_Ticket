@@ -11,6 +11,12 @@ export const addAddressValidation = [
   body("country").notEmpty(),
 ];
 
+export const addProductValidation = [
+  body("title").notEmpty(),
+  body("description").notEmpty(),
+  body("price").notEmpty(),
+];
+
 
 export const validate = (req, res, next) => {
   const errors = validationResult(req);

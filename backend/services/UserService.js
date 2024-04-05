@@ -45,7 +45,7 @@ class UserServices {
       }
     } catch (error) {
       // Handle errors and log them
-      console.log(error,'register user service');
+      console.log(error, "register user service");
       logger.error("Error in registerUser:", {
         message: error.message,
         stack: error.stack,
@@ -81,7 +81,7 @@ class UserServices {
       }
     } catch (error) {
       // Logging and throwing an error for failed user login
-      console.log(error,'user login service');
+      console.log(error, "user login service");
       logger.error("Error in userLogin:", {
         message: error.message,
         stack: error.stack,
@@ -108,11 +108,35 @@ class UserServices {
       }
     } catch (error) {
       // Logging and throwing an error for failed user retrieval
-      console.log(error,'get user service');
+      console.log(error, "get user service");
       logger.error("Error in getUser:", {
         message: error.message,
         stack: error.stack,
         additionalInfo: "Error in getUser:",
+      });
+      throw error;
+    }
+  }
+
+  async getProducts() {
+    try {
+      const products = await UserRepository.getProducts();
+      // Checking if the user exists
+      if (products) {
+        // Converting the user to an object and returning success response
+        // const user = finduser.toObject();
+        return { statusCode: 200, products };
+      } else {
+        // Throwing an error for user not found
+        throw new Error("products not found");
+      }
+    } catch (error) {
+      // Logging and throwing an error for failed user retrieval
+      console.log(error, "get products service");
+      logger.error("Error in getProducts:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error in getProducts:",
       });
       throw error;
     }
@@ -131,13 +155,43 @@ class UserServices {
       };
     } catch (error) {
       // Logging and throwing an error for failed address addition
-      console.log(error,'add address service');
+      console.log(error, "add address service");
       logger.error("Error in addAddress:", {
         message: error.message,
         stack: error.stack,
         additionalInfo: "Failed to add user's address",
       });
       throw new Error("Failed to add user's address");
+    }
+  }
+  async addProduct(title, description, price) {
+    try {
+      // Check if the product already exists
+      const existingProduct = await UserRepository.findProductByName(title);
+      if (existingProduct) {
+        return {
+          statusCode: 409, // Conflict status code for duplicate resource
+          data: { error: "Product already exists" },
+        };
+      }
+
+      // Create a new product object
+      const product = { title, description, price };
+
+      // Call the repository method to add the product
+      const result = await UserRepository.createProduct(product);
+
+      return result; // Return the result from the repository
+    } catch (error) {
+      console.error(error, "add product service");
+      // Handling errors and logging them
+      logger.error("Error in addProduct service", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while adding product",
+      });
+
+      throw new Error("Failed to add product");
     }
   }
 }
