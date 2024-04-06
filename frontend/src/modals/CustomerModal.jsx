@@ -46,6 +46,26 @@ const AddCustomerModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+    if (!formData.email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+    if (!formData.phone.trim()) {
+      toast.error("phone is required");
+      return;
+    }
+    if (!formData.address.trim()) {
+      toast.error("address is required");
+      return;
+    }
+    if (formData.products.length === 0) {
+      toast.error("At least one product must be selected");
+      return;
+    }
     try {
       const response = await axios.post("/add-customer", formData);
       setFormData({
@@ -103,6 +123,7 @@ const AddCustomerModal = ({
               value={formData.email}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
+              required
             />
           </div>
           <div className="mb-4">

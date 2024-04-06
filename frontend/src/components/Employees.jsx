@@ -5,6 +5,7 @@ import axios from "axios";
 const Products = () => {
   const [showModal, setShowModal] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [refresher,setRefresher]=useState(Date.now())
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,13 +15,12 @@ const Products = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refresher]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get("/get-employees");
       setEmployees(response.data);
-      console.log(response.data);
     } catch (error) {
       toast.error("something went wrong");
       console.error("Error fetching product:", error);
@@ -99,6 +99,7 @@ const Products = () => {
       });
       setShowModal(false);
       toast.success("employee added successfully");
+      setRefresher(Date.now())
     } catch (error) {
       setFormData({
         name: "",

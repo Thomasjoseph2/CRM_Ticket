@@ -94,17 +94,15 @@ class UserServices {
   async getProducts() {
     try {
       const products = await UserRepository.getProducts();
-      // Checking if the user exists
+      // Checking if the products exists
       if (products) {
-        // Converting the user to an object and returning success response
-        // const user = finduser.toObject();
         return { statusCode: 200, products };
       } else {
-        // Throwing an error for user not found
+        // Throwing an error for products not found
         throw new Error("products not found");
       }
     } catch (error) {
-      // Logging and throwing an error for failed user retrieval
+      // Logging and throwing an error for failed products retrieval
       console.log(error, "get products service");
       logger.error("Error in getProducts:", {
         message: error.message,
@@ -122,11 +120,11 @@ class UserServices {
       if (employee) {
         return { statusCode: 200, employee };
       } else {
-        // Throwing an error for user not found
+        // Throwing an error for employee not found
         throw new Error("employee not found");
       }
     } catch (error) {
-      // Logging and throwing an error for failed user retrieval
+      // Logging and throwing an error for failed employee retrieval
       console.log(error, "get employee service");
       logger.error("Error in getemployee:", {
         message: error.message,
@@ -139,17 +137,15 @@ class UserServices {
   async getCustomers() {
     try {
       const customers = await UserRepository.getCustomers();
-      // Checking if the user exists
+      // Checking if the customer exists
       if (customers) {
-        // Converting the user to an object and returning success response
-        // const user = finduser.toObject();
         return { statusCode: 200, customers };
       } else {
-        // Throwing an error for user not found
+        // Throwing an error for customer not found
         throw new Error("customers not found");
       }
     } catch (error) {
-      // Logging and throwing an error for failed user retrieval
+      // Logging and throwing an error for failed customer retrieval
       console.log(error, "get customers service");
       logger.error("Error in getcustomers:", {
         message: error.message,

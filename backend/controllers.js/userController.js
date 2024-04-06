@@ -24,7 +24,6 @@ const registerUser = async (req, res) => {
 // Route: POST /api/users/add-customer
 // Access: Public
 
-// Backend - Controller
 const addCustomer = async (req, res) => {
   try {
     const result = await UserService.addCustomer(req.body);
@@ -40,7 +39,9 @@ const addCustomer = async (req, res) => {
   }
 };
 
-// Backend - Controller
+// Controller for adding new employees
+// Route: POST /api/users/add-employees
+// Access: Public
 const addEmployees = async (req, res) => {
   try {
     const result = await UserService.addEmployee(req.body);
@@ -84,6 +85,10 @@ const authUser = async (req, res) => {
   }
 };
 
+// Controller for retrieving products
+// Route: GET /api/users//get-products
+// Access: Public
+
 const getProduct = async (req, res) => {
   try {
     // Extracting userId from the request body
@@ -103,6 +108,10 @@ const getProduct = async (req, res) => {
   }
 };
 
+// Controller for retrieving employees
+// Route: GET /api/users/get-employees
+// Access: Public
+
 const getEmployees = async (req, res) => {
   try {
     // Extracting userId from the request body
@@ -121,7 +130,9 @@ const getEmployees = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
+// Controller for retrieving customers
+// Route: GET /api/users/get-customers
+// Access: Public
 const getCustomers = async (req, res) => {
   try {
     // Extracting userId from the request body
@@ -140,7 +151,9 @@ const getCustomers = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
+// Controller for adding a new product
+// Route: POST /api/users/add-product
+// Access: Public
 const addProduct = async (req, res) => {
   try {
     // Extracting name, description, and price from the request body
@@ -168,7 +181,9 @@ const addProduct = async (req, res) => {
   }
 };
 
-//logout expiring the jwt
+// Controller for logging out user and expiring JWT
+// Route: POST /api/users/logout
+// Access: Public
 const logout = async (req, res) => {
   try {
     res.cookie("userjwt", "", { httpOnly: true, expires: new Date(0) });
@@ -184,6 +199,9 @@ const logout = async (req, res) => {
   }
 };
 
+// Controller for sending email
+// Route: POST /api/users/send-email
+// Access: Public
 const sendEmail = async (req, res) => {
   try {
     const result = await UserService.sendMail(req.body);
@@ -197,7 +215,9 @@ const sendEmail = async (req, res) => {
     });
   }
 };
-
+// Controller for updating customer information
+// Route: PUT /api/users/update-customer
+// Access: Public
 const updateCustomer = async (req, res) => {
   try {
     const { id, name, email, phone, address } = req.body;

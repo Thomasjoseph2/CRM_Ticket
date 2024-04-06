@@ -82,11 +82,11 @@ const Navbar = () => {
       <div
         className={
           !toggle
-            ? "fixed left-0 top-0 p-4 w-3/4 bg-[#000300] ease-in-out duration-500"
+            ? "fixed left-0 top-0 p-4 w-[90%] bg-[#000300] ease-in-out duration-500"
             : "fixed left-[-100%]"
         }
       >
-        <h1 className=" p-4 w-full text-3xl font-bold text-[#00df9a]">React</h1>
+        <h1 className=" p-4 w-full text-3xl font-bold text-[#00df9a]">CRM</h1>
         <ul className="uppercase ">
           <Link to="/customers">
             <li className="p-4">Coustomers</li>

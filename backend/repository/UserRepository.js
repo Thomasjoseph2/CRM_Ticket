@@ -85,7 +85,7 @@ class UserRepository {
 
   async getEmployee() {
     try {
-      // Find all products and sort them based on the 'createdAt' field in descending order
+      // Find all employees and sort them based on the 'createdAt' field in descending order
       const employee = await Employee.find({}).sort({ createdAt: -1 });
 
       return employee;
@@ -100,13 +100,12 @@ class UserRepository {
   }
   async getCustomers() {
     try {
-      // Find all products and sort them based on the 'createdAt' field in descending order
-      // const customers = await Customer.find({}).sort({ createdAt: -1 });
-
-      const customers = await Customer.find({}).populate({
-        path: "products",
-        select: "title _id",
-      });
+      const customers = await Customer.find({})
+        .populate({
+          path: "products",
+          select: "title _id",
+        })
+        .sort({ createdAt: -1 });
 
       return customers;
     } catch (error) {
@@ -184,7 +183,7 @@ class UserRepository {
 
   async createCustomer(customerData) {
     try {
-      // Create a new product using the Product model
+      // Create a new customer using the customer model
       const customer = await Customer.create(customerData);
 
       return {
@@ -205,7 +204,7 @@ class UserRepository {
   }
   async createEmployee(employeeData) {
     try {
-      // Create a new product using the Product model
+      // Create a new employee using the employee model
       const employee = await Employee.create(employeeData);
 
       return {
@@ -215,7 +214,7 @@ class UserRepository {
     } catch (error) {
       console.error(error, "create employee repository");
       // Handling errors and logging them
-      logger.error("Error in createemployee repository", {
+      logger.error("Error in create employee repository", {
         message: error.message,
         stack: error.stack,
         additionalInfo: "Error occurred while creating employee",
@@ -226,7 +225,11 @@ class UserRepository {
   }
   async updateCustomer(id, customerData) {
     try {
-      const updateCustomer = await Customer.findByIdAndUpdate(id, customerData, { new: true });
+      const updateCustomer = await Customer.findByIdAndUpdate(
+        id,
+        customerData,
+        { new: true }
+      );
       return updateCustomer;
     } catch (error) {
       console.error(error, "update customer repository");
