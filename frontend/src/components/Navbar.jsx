@@ -87,20 +87,31 @@ const Navbar = () => {
         }
       >
         <h1 className=" p-4 w-full text-3xl font-bold text-[#00df9a]">CRM</h1>
-        <ul className="uppercase ">
-          <Link to="/customers">
-            <li className="p-4">Coustomers</li>
-          </Link>
-          <Link to="/employees">
-            <li className="p-4">Employees</li>
-          </Link>
-          <Link to="/products">
-            <li className="p-4">Products</li>
-          </Link>
-          <Link onClick={handleLogout}>
-            <li className="p-4">Logout</li>
-          </Link>
-        </ul>
+        {userInfo ? (
+          <ul className="uppercase ">
+            <Link to="/customers">
+              <li className="p-4">Coustomers</li>
+            </Link>
+            <Link to="/employees">
+              <li className="p-4">Employees</li>
+            </Link>
+            <Link to="/products">
+              <li className="p-4">Products</li>
+            </Link>
+            <Link onClick={handleLogout}>
+              <li className="p-4">Logout</li>
+            </Link>
+          </ul>
+        ) : (
+          <ul className="uppercase ">
+            <Link to="/login">
+              <li className="p-4">Login</li>
+            </Link>
+            <Link to="/signup">
+              <li className="p-4">Signup</li>
+            </Link>
+          </ul>
+        )}
       </div>
     </div>
   );
