@@ -91,9 +91,13 @@ class UserServices {
     }
   }
 
-  async getProducts() {
+  async getProducts(limit, startIndex, query) {
     try {
-      const products = await UserRepository.getProducts();
+      const products = await UserRepository.getProducts(
+        limit,
+        startIndex,
+        query
+      );
       // Checking if the products exists
       if (products) {
         return { statusCode: 200, products };
@@ -101,6 +105,22 @@ class UserServices {
         // Throwing an error for products not found
         throw new Error("products not found");
       }
+    } catch (error) {
+      // Logging and throwing an error for failed products retrieval
+      console.log(error, "get products service");
+      logger.error("Error in getProducts:", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error in getProducts:",
+      });
+      throw error;
+    }
+  }
+
+  async getProductCount(query) {
+    try {
+      const productsCount = await UserRepository.getProductCount(query);
+      return productsCount;
     } catch (error) {
       // Logging and throwing an error for failed products retrieval
       console.log(error, "get products service");

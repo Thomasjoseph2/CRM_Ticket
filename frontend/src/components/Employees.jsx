@@ -64,8 +64,21 @@ const Products = () => {
       selector: (row) => row.phone,
     },
     {
-      name: "address",
-      selector: (row) => row.address,
+      name: "Task assigned",
+      selector: (row) => row.task,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="space-x-2">
+          <button
+            className="bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => handleSendEmail(row.email, row.name)}
+          >
+            Assign Task
+          </button>
+        </div>
+      ),
     },
   ];
 

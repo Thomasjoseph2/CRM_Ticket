@@ -1,3 +1,4 @@
+import { query } from "express";
 import logger from "../config/logger.js";
 import UserService from "../services/UserService.js";
 
@@ -42,6 +43,7 @@ const addCustomer = async (req, res) => {
 // Controller for adding new employees
 // Route: POST /api/users/add-employees
 // Access: Public
+
 const addEmployees = async (req, res) => {
   try {
     const result = await UserService.addEmployee(req.body);
@@ -89,24 +91,24 @@ const authUser = async (req, res) => {
 // Route: GET /api/users//get-products
 // Access: Public
 
-const getProduct = async (req, res) => {
-  try {
-    // Extracting userId from the request body
-    const products = await UserService.getProducts();
-    // Sending the response based on the result
-    res.status(products.statusCode).json({ products: products.products });
-  } catch (error) {
-    // Handling errors and logging them
-    console.log(error, "get products controller");
-    logger.error("Get user products error", {
-      message: error.message,
-      stack: error.stack,
-      additionalInfo: "get products controller",
-    });
+// const getProduct = async (req, res) => {
+//   try {
+//     // Extracting userId from the request body
+//     const products = await UserService.getProducts();
+//     // Sending the response based on the result
+//     res.status(products.statusCode).json({ products: products.products });
+//   } catch (error) {
+//     // Handling errors and logging them
+//     console.log(error, "get products controller");
+//     logger.error("Get user products error", {
+//       message: error.message,
+//       stack: error.stack,
+//       additionalInfo: "get products controller",
+//     });
 
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
 // Controller for retrieving employees
 // Route: GET /api/users/get-employees
@@ -239,17 +241,53 @@ const updateCustomer = async (req, res) => {
   }
 };
 
+const getproducts = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 0;
+    const limit = parseInt(req.query.limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    let query;
+
+    if (req.query.search) {
+      query = { title: { $regex: req.query.search, $options: "i" } };
+    } else {
+      query = {};
+    }
+    const productCount = await UserService.getProductCount(query);
+    const products = await UserService.getProducts(limit, startIndex, query);
+    const results = {};
+    results.results = products?.products;
+    results.productCount = productCount;
+    if (startIndex > 0) {
+      results.previous = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    if (endIndex < productCount) {
+      results.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    res.status(products.statusCode).json({ results });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Exporting the controllers
 export {
   authUser,
   logout,
   registerUser,
   addProduct,
-  getProduct,
   addCustomer,
   getCustomers,
   addEmployees,
   getEmployees,
   sendEmail,
   updateCustomer,
+  getproducts,
 };

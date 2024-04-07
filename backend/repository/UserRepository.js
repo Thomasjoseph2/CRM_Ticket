@@ -66,11 +66,18 @@ class UserRepository {
       throw new Error("Failed to find user by name");
     }
   }
+  async getProductCount(query){
+    return await Product.find(query).count()
+  }
 
-  async getProducts() {
+  async getProducts(limit, startIndex,query) {
+    console.log(limit, startIndex,query);
     try {
       // Find all products and sort them based on the 'createdAt' field in descending order
-      const products = await Product.find({}).sort({ createdAt: -1 });
+      const products = await Product.find(query)
+        .limit(limit)
+        .skip(startIndex)
+        .sort({ createdAt: -1 });
 
       return products;
     } catch (error) {

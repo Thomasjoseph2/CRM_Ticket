@@ -91,7 +91,7 @@ const AddCustomerModal = ({
     }
     setShowModal(false);
   };
-  const productOptions = products.map((product) => ({
+  const productOptions = products?.map((product) => ({
     value: product._id,
     label: product.title,
   }));

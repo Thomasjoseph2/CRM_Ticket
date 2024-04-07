@@ -6,7 +6,11 @@ const Products = () => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const [refresher, setRefresher] = useState(Date.now());
-
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5);
+  const [previous, setPrevious] = useState(null);
+  const [next, setNext] = useState(null);
+  const [search,setSearch]=useState('')
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -19,8 +23,12 @@ const Products = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/get-products");
-      setData(response.data);
+      const response = await axios.get(
+        `/get-products?page=${page}&limit=${limit}&search=${search}`
+      );
+      setData(response?.data?.results?.results);
+      setNext(response?.data?.results?.next);
+      setPrevious(response?.data?.results?.previous);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -119,12 +127,20 @@ const Products = () => {
 
   return (
     <div>
+      <div className="flex justify-between items-center ">
       <button
         className="bg-[#00df9a] p-2 ml-10 mt-10"
         onClick={() => setShowModal(true)}
       >
         ADD PRODUCT
       </button>
+      <div className="mr-10 mt-10">
+      <input onChange={(e)=>setSearch(e.target.value)} className=" ml-1 p-1 rounded-sm" type="text" />
+      <button onClick={()=>{setRefresher(Date.now())}}  className=" ml-1 p-1 bg-[#00df9a] rounded-sm">search</button>
+
+      </div>
+      </div>
+
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-start bg-black bg-opacity-50">
           <div className="bg-gray-800 rounded-lg p-8 max-w-md mx-36">
@@ -177,11 +193,32 @@ const Products = () => {
         </div>
       )}
       <div className="m-10">
-        <DataTable
-          customStyles={customStyles}
-          columns={columns}
-          data={data?.products}
-        />
+        <DataTable customStyles={customStyles} columns={columns} data={data} />
+        <div className=" flex w-full items-center justify-center">
+          {previous && (
+            <button
+              onClick={() => {
+                setPage(page - 1);
+                setRefresher(Date.now());
+              }}
+              className="bg-[#00df9a] mt-4 ml-[2px] p-1 w-20 font-bold text-white"
+            >
+              Previous
+            </button>
+          )}
+
+          {next && (
+            <button
+              onClick={() => {
+                setPage(page + 1);
+                setRefresher(Date.now());
+              }}
+              className="bg-[#00df9a]  mt-4  ml-[2px]  p-1 w-20 font-bold text-white"
+            >
+              Next
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
