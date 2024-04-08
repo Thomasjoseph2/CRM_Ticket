@@ -2,7 +2,9 @@ import UserRepository from "../repository/UserRepository.js";
 import logger from "../config/logger.js";
 import { isStrongPassword } from "../utils/passwordValidator.js";
 import generateToken from "../utils/generateNormalToken.js";
+import Task from "../models/tasksModel.js";
 import nodemailer from "nodemailer";
+import { title } from "process";
 class UserServices {
   static instance;
 
@@ -255,7 +257,7 @@ class UserServices {
       throw new Error("Failed to add employee");
     }
   }
-  async sendMail(emailData) {
+  async sendMail(emailData, recipientEmail) {
     try {
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -272,9 +274,9 @@ class UserServices {
           name: emailData.user,
           address: process.env.USER_EMAIL,
         },
-        to: emailData.recipientEmail,
+        to: recipientEmail,
         subject: emailData.subject,
-        text: "You are important for us",
+        text: "From CRM Application",
         html: `<b>${emailData.message}</b>`,
       };
 
@@ -314,6 +316,43 @@ class UserServices {
         additionalInfo: "Error occurred while updating customer",
       });
       throw new Error("Failed to update customer");
+    }
+  }
+
+  async addTask(task) {
+    try {
+      // Create a new task object
+      const newTask = {
+        title: task.subject,
+        description: task.message,
+        assignedBy: task.user,
+        assignedTo: task.employee._id,
+      };
+
+      // Call the repository method to add the task
+      // const result = await Task.create(newTask);
+      const result =await UserRepository.createTask(newTask);
+      if (result) {
+        return {
+          statusCode: 201,
+          data: result, // Return the created task
+        };
+      }else{
+        return {
+          statusCode: 500,
+          data: 'failed to add task', // Return the created task
+        };
+      }
+    } catch (error) {
+      console.error(error, "add task service");
+      // Handling errors and logging them
+      logger.error("Error in addTask service", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while adding task",
+      });
+
+      throw new Error("Failed to add task");
     }
   }
 }

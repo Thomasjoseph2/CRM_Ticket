@@ -50,6 +50,13 @@ const UpdateUserModal = ({
     } catch (error) {
       console.error("Error updating user:", error);
       toast.error("User updation failed");
+    } finally {
+      setUserData({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+      });
     }
   };
 

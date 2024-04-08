@@ -85,15 +85,15 @@ const Customers = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <div className="space-x-2">
+        <div className="flex justify-center items-center">
           <button
-            className="bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="  m-1 bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             onClick={() => handleUpdateClick(row)}
           >
             Update User
           </button>
           <button
-            className="bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="  m-1 bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             onClick={() => handleSendEmail(row.email, row.name)}
           >
             Send Email
@@ -117,12 +117,17 @@ const Customers = () => {
         fontSize: "14px",
         borderColor: "white",
         borderWidth: "1px",
+        alignItems:'center',
+        justifyContent:'center'
       },
     },
     cells: {
       style: {
         borderColor: "white",
         borderWidth: "1px",
+        tex:'center',
+        justifyContent:'center',
+        height: 'auto',
       },
     },
     pagination: {

@@ -3,6 +3,7 @@ import logger from "../config/logger.js";
 import Product from "../models/productModel.js";
 import Customer from "../models/customerModel.js";
 import Employee from "../models/employeesModel.js";
+import Task from "../models/tasksModel.js";
 class UserRepository {
   static instance;
 
@@ -66,12 +67,11 @@ class UserRepository {
       throw new Error("Failed to find user by name");
     }
   }
-  async getProductCount(query){
-    return await Product.find(query).count()
+  async getProductCount(query) {
+    return await Product.find(query).count();
   }
 
-  async getProducts(limit, startIndex,query) {
-    console.log(limit, startIndex,query);
+  async getProducts(limit, startIndex, query) {
     try {
       // Find all products and sort them based on the 'createdAt' field in descending order
       const products = await Product.find(query)
@@ -238,6 +238,23 @@ class UserRepository {
         { new: true }
       );
       return updateCustomer;
+    } catch (error) {
+      console.error(error, "update customer repository");
+      logger.error("Error in updateCustomer repository", {
+        message: error.message,
+        stack: error.stack,
+        additionalInfo: "Error occurred while updating customer",
+      });
+      throw new Error("Failed to update customer");
+    }
+  }
+  async createTask(newTask) {
+    try {
+      const result = await Task.create(newTask);
+      return {
+        statusCode: 201,
+        data: result,
+      };
     } catch (error) {
       console.error(error, "update customer repository");
       logger.error("Error in updateCustomer repository", {

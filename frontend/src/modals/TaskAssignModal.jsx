@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useUserContext } from "../context/userContext";
 
-const SendEmailModal = ({ isOpen, onClose, recipientEmail }) => {
-  const { getUserInfo, logout } = useUserContext();
+const TaskAssignModal = ({ isOpen, onClose, employee }) => {
+  const { getUserInfo } = useUserContext();
   const userInfo = getUserInfo();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -22,21 +22,32 @@ const SendEmailModal = ({ isOpen, onClose, recipientEmail }) => {
     setIsSending(true);
     sendButtonRef.current.disabled = true;
     try {
-      const response = await axios.post("/send-mail", {
+      const response = await axios.post("/assign-task", {
         message,
         subject,
-        recipientEmail,
+        employee,
         user: userInfo.name,
       });
       console.log(response, "response");
-      if (response.status === 200)
-        toast.success(`email send successfully to ${recipientEmail} `);
-      else if (response?.data?.data?.statusCode === 500)
-        toast.error(`mail sending failed to ${recipientEmail}`);
+
+      const { mail, task } = response.data;
+
+      if (mail.statusCode === 200) {
+        toast.success(`Email sent successfully to ${employee.email}`);
+      } else {
+        toast.error(`Error sending email to ${employee.email}`);
+      }
+
+      if (task.statusCode === 201) {
+        toast.success("Task added successfully");
+      } else {
+        toast.error("Error adding task");
+      }
+
       onClose();
     } catch (error) {
       console.log(error, "error");
-      toast.error(`mail sending failed to ${recipientEmail}`);
+      toast.error(`mail sending failed to ${employee.email}`);
       onClose();
     } finally {
       setMessage("");
@@ -78,7 +89,7 @@ const SendEmailModal = ({ isOpen, onClose, recipientEmail }) => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-white">Send Email</h2>
+          <h2 className="text-xl font-semibold text-white">Assign Task</h2>
           {error && <p className="text-red-500">{error}</p>}
           <input
             type="text"
@@ -101,9 +112,9 @@ const SendEmailModal = ({ isOpen, onClose, recipientEmail }) => {
               Cancel
             </button>
             <button
-              disabled={isSending}
               ref={sendButtonRef}
               onClick={handleSubmit}
+              disabled={isSending}
               className={`bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ${
                 isSending ? "opacity-50 cursor-not-allowed" : ""
               }`}
@@ -117,4 +128,4 @@ const SendEmailModal = ({ isOpen, onClose, recipientEmail }) => {
   );
 };
 
-export default SendEmailModal;
+export default TaskAssignModal;

@@ -14,6 +14,7 @@ import {
   sendEmail,
   updateCustomer,
   getproducts,
+  assignTask
 } from "../../controllers.js/userController.js";
 import {
   authUserValidation,
@@ -63,6 +64,9 @@ router.post(
 router.post("/update-customer", protect, updateCustomer);
 
 router.post("/send-mail", protect, sendEmail);
+
+router.post("/assign-task", protect, assignTask);
+
 
 router.get("/get-products", protect, getproducts);
 

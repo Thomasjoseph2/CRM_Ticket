@@ -38,7 +38,7 @@ const Navbar = () => {
       {userInfo ? (
         <ul className=" hidden md:flex">
           <Link to="/customers">
-            <li className="p-4">Coustomers</li>
+            <li className="p-4">Customers</li>
           </Link>
           <Link to="/employees">
             <li className="p-4">Employees</li>
@@ -90,7 +90,7 @@ const Navbar = () => {
         {userInfo ? (
           <ul className="uppercase ">
             <Link to="/customers">
-              <li className="p-4">Coustomers</li>
+              <li className="p-4">Customers</li>
             </Link>
             <Link to="/employees">
               <li className="p-4">Employees</li>

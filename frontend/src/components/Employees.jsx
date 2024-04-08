@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import toast from "react-hot-toast";
+import TaskAssignModal from "../modals/TaskAssignModal";
 import axios from "axios";
 const Products = () => {
   const [showModal, setShowModal] = useState(false);
   const [employees, setEmployees] = useState([]);
-  const [refresher,setRefresher]=useState(Date.now())
+  const [refresher, setRefresher] = useState(Date.now());
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [employee, setEmployee] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,6 +29,11 @@ const Products = () => {
       console.error("Error fetching product:", error);
     }
   };
+
+  const handleAssignTask = (row) => {
+    setEmployee(row);
+    setIsTaskModalOpen(true)
+  };
   const customStyles = {
     rows: {
       style: {
@@ -40,12 +48,16 @@ const Products = () => {
         fontSize: "14px",
         borderColor: "white",
         borderWidth: "1px",
+        alignItems: "center",
+        justifyContent: "center",
       },
     },
     cells: {
       style: {
         borderColor: "white",
         borderWidth: "1px",
+        alignItems: "center",
+        justifyContent: "center",
       },
     },
   };
@@ -64,16 +76,25 @@ const Products = () => {
       selector: (row) => row.phone,
     },
     {
-      name: "Task assigned",
-      selector: (row) => row.task,
+      name: "Task Details",
+      cell: (row) => (
+        <div className="flex items-center justify-center">
+          <button
+            className=" bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => handleSendEmail(row)}
+          >
+            View Tasks and Status
+          </button>
+        </div>
+      ),
     },
     {
       name: "Actions",
       cell: (row) => (
-        <div className="space-x-2">
+        <div className="flex items-center justify-center">
           <button
-            className="bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            onClick={() => handleSendEmail(row.email, row.name)}
+            className=" bg-[#00df9a] hover:bg-blue-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => handleAssignTask(row)}
           >
             Assign Task
           </button>
@@ -112,7 +133,7 @@ const Products = () => {
       });
       setShowModal(false);
       toast.success("employee added successfully");
-      setRefresher(Date.now())
+      setRefresher(Date.now());
     } catch (error) {
       setFormData({
         name: "",
@@ -134,6 +155,9 @@ const Products = () => {
       >
         ADD EMPLOYEE
       </button>
+      <h1 className="text-red-600 p-2 ml-9 ">
+        view tasks feature under development...
+      </h1>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-start bg-black bg-opacity-50">
           <div className="bg-gray-800 rounded-lg p-8 w-full sm:w-[40%] sm:mx-44">
@@ -200,6 +224,11 @@ const Products = () => {
           customStyles={customStyles}
           columns={columns}
           data={employees?.employee}
+        />
+        <TaskAssignModal
+          isOpen={isTaskModalOpen}
+          onClose={() => setIsTaskModalOpen(false)}
+          employee={employee}
         />
       </div>
     </div>

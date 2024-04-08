@@ -47,12 +47,16 @@ const Products = () => {
         fontSize: "14px",
         borderColor: "white",
         borderWidth: "1px",
+        alignItems:'center',
+        justifyContent:'center'
       },
     },
     cells: {
       style: {
         borderColor: "white",
         borderWidth: "1px",
+        alignItems:'center',
+        justifyContent:'center'
       },
     },
   };

@@ -206,7 +206,7 @@ const logout = async (req, res) => {
 // Access: Public
 const sendEmail = async (req, res) => {
   try {
-    const result = await UserService.sendMail(req.body);
+    const result = await UserService.sendMail(req.body,req.body.recipientEmail);
     res.status(result.statusCode).json(result.data);
   } catch (error) {
     console.log(error, "sendEmail function");
@@ -277,6 +277,24 @@ const getproducts = async (req, res) => {
   }
 };
 
+const assignTask = async (req, res) => {
+  try {
+    const result = await UserService.sendMail(req.body, req.body.employee.email);
+    const task=await UserService.addTask(req.body)
+    res.status(200).json({
+      mail: result,
+      task: task,
+    });
+  } catch (error) {
+    console.log(error, "assignTask function");
+    logger.error("assign task error", {
+      message: error.message,
+      stack: error.stack,
+      additionalInfo: "error in assignTask controller",
+    });
+  }
+};
+
 // Exporting the controllers
 export {
   authUser,
@@ -290,4 +308,5 @@ export {
   sendEmail,
   updateCustomer,
   getproducts,
+  assignTask,
 };
