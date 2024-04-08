@@ -241,6 +241,9 @@ const updateCustomer = async (req, res) => {
   }
 };
 
+//planing to convert this pagination and search logic into a middleware or common function
+//can reuse this function in that way .
+
 const getproducts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 0;
